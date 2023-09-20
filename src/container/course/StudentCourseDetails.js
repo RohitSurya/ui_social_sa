@@ -25,191 +25,25 @@ const PageRoutes = [
   },
 ];
 
-const lectures = [
-  {
-    id: '1',
-    title: 'Robotics',
-    classes: [
-      {
-        id: '1',
-        classTitle: 'Introduction to Robotics',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-      {
-        id: '2',
-        classTitle: 'Hisotry of Robotics',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-      {
-        id: '3',
-        classTitle: 'New Trends and Innovation',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-    ],
-  },
-  {
-    id: '2',
-    title: 'Web Development',
-    classes: [
-      {
-        id: '1',
-        classTitle: 'Introduction to Web',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-      {
-        id: '2',
-        classTitle: 'HTML Basics',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-      {
-        id: '3',
-        classTitle: 'JavaScript Basics',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-    ],
-  },
-  {
-    id: '3',
-    title: 'Design Fundamental',
-    classes: [
-      {
-        id: '1',
-        classTitle: 'Introduction',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-      {
-        id: '2',
-        classTitle: 'Demand of UI/UX Design',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-      {
-        id: '3',
-        classTitle: 'Tools',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-    ],
-  },
-  {
-    id: '4',
-    title: 'Colour Theory',
-    classes: [
-      {
-        id: '1',
-        classTitle: 'Course Introduction',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-      {
-        id: '2',
-        classTitle: 'Demand of UI/UX Design',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-      {
-        id: '3',
-        classTitle: 'Tools',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-    ],
-  },
-  {
-    id: '5',
-    title: 'Typography',
-    classes: [
-      {
-        id: '1',
-        classTitle: 'Course Introduction',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-      {
-        id: '2',
-        classTitle: 'Demand of UI/UX Design',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-      {
-        id: '3',
-        classTitle: 'Tools',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-    ],
-  },
-  {
-    id: '6',
-    title: 'Live Project 01',
-    classes: [
-      {
-        id: '1',
-        classTitle: 'Course Introduction',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-      {
-        id: '2',
-        classTitle: 'Demand of UI/UX Design',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-      {
-        id: '3',
-        classTitle: 'Tools',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-    ],
-  },
-  {
-    id: '7',
-    title: 'Live Project 02',
-    classes: [
-      {
-        id: '1',
-        classTitle: 'Course Introduction',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-      {
-        id: '2',
-        classTitle: 'Demand of UI/UX Design',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-      {
-        id: '3',
-        classTitle: 'Tools',
-        videoId: 'L61p2uyiMSo',
-        duration: '5',
-      },
-    ],
-  },
-];
 
 function CourseDetails() {
   const path = '/student';
   const [isOpen, setOpen] = useState(false);  
 
-  const [courseName, setCourseName] = useState(null);
+  const [courseName, setCourseName] = useState('');
+  const [courseDesc, setCourseDesc] = useState('');
+  const [modules, setModules] = useState([]);
 
   useEffect(() => {
-    fetch('/course/getCourses')
+    fetch('/course/getCourses?courseId=3')
       .then((res) => {
         return res.json();
       })
       .then((result) => {
         console.log(result);
         setCourseName(result.courseName);
+        setCourseDesc(result.courseDescription);  
+        setModules(result.module);      
       });
   },[]); 
 
@@ -224,11 +58,7 @@ function CourseDetails() {
               <div className="ninjadash-course-content">
                 <h2 className="ninjadash-course-content-top-title">{courseName}</h2>
                 <h2 className="ninjadash-course-content__title">About This Course </h2>
-                <p>
-                  User interface design or user interface engineering is the design of user interfaces for machines and
-                  software, such as computers, home appliances, mobile devices, and other electronic devices, with the
-                  focus on maximizing usability and the user experience.
-                </p>
+                <p>{courseDesc}</p>
                 <h2 className="ninjadash-course-content__title">Course content </h2>
                 <div className="ninjadash-course-content__lectures">
                   <CollapseStyleWrap>
@@ -237,26 +67,26 @@ function CourseDetails() {
                       defaultActiveKey={['1']}
                       expandIcon={({ isActive }) => (isActive ? <UilMinus /> : <UilPlus />)}
                     >
-                      {lectures.map((lecture) => (
+                      {modules.map((lecture) => (
                         <Panel
-                          header={lecture.title}
-                          key={lecture.id}
+                          header={lecture.moduleName}
+                          key={lecture.moduleId}
                           extra={
                             <>
-                              <span>03 Lectures</span>
+                              <span>{lecture.topic.length} Lectures</span>
                             </>
                           }
                         >
                           <ul>
-                            {lecture.classes.map((singleClass, index) => (
+                            {lecture.topic.map((singletopc, index) => (
                               <li key={index}>
                                 <Link
                                   className="ninjadash-course-content__lecture--single"
-                                  to={`${path}/class`} state={{ fromCourse: {id: singleClass.id, title: singleClass.classTitle} }}
+                                  to={`${path}/class`} state={{ fromCourse: {id: singletopc.topicId, title: singletopc.topicName} }}
                                 >
                                   <UilPlay />
                                   <span className="ninjadash-course-content__lecture--title">
-                                    {singleClass.classTitle}
+                                    {singletopc.topicName}
                                   </span>
                                   <div className="ninjadash-course-content__lecture--extra">
                                     <p>Pre-Assignment</p>&nbsp;&nbsp;
