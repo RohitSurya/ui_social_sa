@@ -1,4 +1,4 @@
-import React, { useState, lazy, Suspense } from 'react';
+import React, { useState, lazy, useEffect} from 'react';
 import { Link, Routes, Route } from 'react-router-dom';
 import { Row, Col, Collapse, Spin } from 'antd';
 import UilPlay from '@iconscout/react-unicons/icons/uil-play';
@@ -198,7 +198,20 @@ const lectures = [
 
 function CourseDetails() {
   const path = '/student';
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setOpen] = useState(false);  
+
+  const [courseName, setCourseName] = useState(null);
+
+  useEffect(() => {
+    fetch('/course/getCourses')
+      .then((res) => {
+        return res.json();
+      })
+      .then((result) => {
+        console.log(result);
+        setCourseName(result.courseName);
+      });
+  },[]); 
 
   return (
     <CourseDetailsWrap>
@@ -209,7 +222,7 @@ function CourseDetails() {
           <Col lg={12} xs={24}>
             <div className="ninjadash-course-details-wrap">
               <div className="ninjadash-course-content">
-                <h2 className="ninjadash-course-content-top-title">AI and Coding Masters Course</h2>
+                <h2 className="ninjadash-course-content-top-title">{courseName}</h2>
                 <h2 className="ninjadash-course-content__title">About This Course </h2>
                 <p>
                   User interface design or user interface engineering is the design of user interfaces for machines and
