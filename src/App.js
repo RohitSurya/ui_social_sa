@@ -13,6 +13,7 @@ import Admin from './routes/admin';
 import Auth from './routes/auth';
 import './static/css/style.css';
 import Student from './routes/student';
+import Teacher from './routes/teacher';
 
 const NotFound = lazy(() => import('./container/pages/404'));
 
@@ -53,6 +54,7 @@ function ProviderConfig() {
               <Routes>
                 <Route path="/admin/*" element={<ProtectedRoute path="/*" Component={Admin} />} />
                 <Route path="/student/*" element={<ProtectedRoute path="/*" Component={Student} />} />
+                <Route path="/teacher/*" element={<ProtectedRoute path="/*" Component={Teacher} />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             )}
