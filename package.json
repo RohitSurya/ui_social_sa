@@ -2,7 +2,7 @@
   "name": "HexaDash",
   "version": "0.1.0",
   "private": true,
-  "proxy": "aws address rohit",
+  "proxy": "https://cffn9wey23.us-east-1.awsapprunner.com",
   "dependencies": {
     "@ckeditor/ckeditor5-import-word": "^39.0.2",
     "@ckeditor/ckeditor5-react": "^6.1.0",
