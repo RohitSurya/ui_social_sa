@@ -11,7 +11,7 @@ import { FigureWizards, WizardWrapper, OrderSummary, WizardTwo } from './pageSty
 import { Steps } from '../../components/steps/steps';
 import { Cards } from '../../components/cards/frame/cards-frame';
 
-const dateFormat = 'MM/DD/YYYY';
+const dateFormat = 'DD-MMM-yyyy';
 
 const { Option } = Select;
 function Info() {
@@ -42,10 +42,26 @@ function Info() {
   };
 
   const [firstName, setFirstName] = useState('')
+  const [middleName, setMiddleName] = useState('')
   const [lastName, setLastName] = useState('')
   const [gender, setGender] = useState('')
+  const [dob, setDob] = useState('')
+  const [mobile, setMobile] = useState('')
   const [email, setEmail] = useState('')
   const [address1, setAddress1] = useState('')
+  const [address2, setAddress2] = useState('')
+  const [stateAddress, setStateAddress] = useState('')
+  const [city, setCity] = useState('')
+
+  const [parentFirstName, setParentFirstName] = useState('')
+  const [parentMiddleName, setParentMiddleName] = useState('')
+  const [parentLastName, setParentLastName] = useState('')
+  const [relation, setRelation] = useState('')
+  const [parentMobile, setParentMobile] = useState('')
+  const [parentEmail, setParentEmail] = useState('')
+  const [responseMsg, setResponseMsg] = useState('')
+  const [additionalMsg, setAdditionalMsg] = useState('')
+  
 
   const done = () => {
     const confirm = window.confirm('Are you sure to submit the details?');
@@ -64,20 +80,40 @@ function Info() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          firstName: firstName.trim(),
-          lastName: lastName.trim(),
-          gender: gender.trim(),
-          address1: address1.trim(),
-          mailId: email.trim()
+          userType : 'S',
+          firstName : firstName.trim(),
+          middleName : middleName.trim(),
+          lastName : lastName.trim(),
+          dob : dob.toString(),
+          gender : gender.trim(),
+          address1 : address1.trim(),
+          address2 : address2.trim(),
+          city : city.trim(),
+          state : stateAddress.trim(),
+          mobile : mobile.trim(),          
+          mailId : email.trim(),
+          parentDetailDTO : {
+            firstName : parentFirstName.trim(),
+            middleName : parentMiddleName.trim(),
+            lastName : parentLastName.trim(),
+            relationType : relation.trim(),
+            mobile : parentMobile.trim(),
+            mailId : parentEmail.trim()
+          }
         })
       })
       .then(response => response.json())
-      .then(result => console.log(result))
-
+      .then(result => {
+        setResponseMsg(result.message);
+        console.log(result.status==='success')
+        if(result.status==='success')         
+          setAdditionalMsg('Thank you!')
+        else 
+          setAdditionalMsg('Please enter mandatory fields and try again!')    
+      })
     }
   };
   const { status, isFinished, current } = state;  
-
 
   return (
     <WizardWrapper className="ninjadash-wizard-page">
@@ -98,42 +134,42 @@ function Info() {
                     <Col sm={22} xs={24}>
                       <div className="student-form">
                       <Form form={form} name="student">
-              <Form.Item name="firstname" label="First Name" value = {firstName} onChange={e => setFirstName(e.target.value)}>
+              <Form.Item name="firstname" label="First Name" required='true' value = {firstName} onChange={e => setFirstName(e.target.value)}>
                           <Input placeholder="FirstName" />
                         </Form.Item>
-                        <Form.Item name="middlename" label="Middle Name">
+                        <Form.Item name="middlename" label="Middle Name" value = {middleName} onChange={e => setMiddleName(e.target.value)}>
                           <Input placeholder="MiddleName" />
                         </Form.Item>
-                        <Form.Item name="lastname" label="Last Name" value = {lastName} onChange={e => setLastName(e.target.value)}>
+                        <Form.Item name="lastname" label="Last Name" required='true' value = {lastName} onChange={e => setLastName(e.target.value)}>
                           <Input placeholder="LastName" />
                         </Form.Item>
-                        <Form.Item name="gender" label="Gender" value = {gender} onChange={e => setGender(e.target.value)}>
+                        <Form.Item name="gender" label="Gender" required='true' value = {gender} onChange={e => setGender(e.target.value)}>
                         <Radio.Group defaultValue="a">
-                    <Radio.Button value="a">Male</Radio.Button>
-                    <Radio.Button value="b">Female</Radio.Button>
-                    <Radio.Button value="c">Others</Radio.Button>
+                    <Radio.Button value="M">Male</Radio.Button>
+                    <Radio.Button value="F">Female</Radio.Button>
+                    <Radio.Button value="O">Others</Radio.Button>
                   </Radio.Group>
                   </Form.Item>
                         
-              <Form.Item name="dob" rules={[{ type: 'object', whitespace: true }]} label="Date of Birth">
-                <DatePicker format={dateFormat} style={{ width: '100%' }} />
+              <Form.Item name="dob" rules={[{ type: 'object', whitespace: true }]} label="Date of Birth" >
+                <DatePicker format={dateFormat} style={{ width: '100%' }} selected={dob} onChange={(dob) => setDob(dob.format('DD-MMM-yyyy'))} />
               </Form.Item>
-                        <Form.Item name="phone" label="Mobile No.">
+                        <Form.Item name="phone" label="Mobile No." required='true' value = {mobile} onChange={e => setMobile(e.target.value)}>
                           <Input placeholder="Phone" />
                         </Form.Item>
-                        <Form.Item name="email" rules={[{ type: 'email' }]} label="Email Address" value = {email} onChange={e => setEmail(e.target.value)}>
+                        <Form.Item name="email" rules={[{ type: 'email' }]} label="Email Address" required='true' value = {email} onChange={e => setEmail(e.target.value)}>
                           <Input placeholder="name@gmail.com" />
                         </Form.Item>
                         <Form.Item name="address1" label="Address1" value = {address1} onChange={e => setAddress1(e.target.value)}>
                           <Input placeholder="Address1" />
                         </Form.Item>
-                        <Form.Item name="address2" label="Address2">
+                        <Form.Item name="address2" label="Address2" value = {address2} onChange={e => setAddress2(e.target.value)}>
                           <Input placeholder="Address2" />
                         </Form.Item>
-                        <Form.Item name="state" label="State">
+                        <Form.Item name="state" label="State" value = {stateAddress} onChange={e => setStateAddress(e.target.value)}>
                           <Input placeholder="State" />
                         </Form.Item>
-                        <Form.Item name="city" label="City">
+                        <Form.Item name="city" label="City" value = {city} onChange={e => setCity(e.target.value)}>
                           <Input placeholder="City" />
                         </Form.Item> 
                                        
@@ -157,28 +193,28 @@ function Info() {
                     <Col sm={22} xs={24}>
                       <div className="parent-form">
                         <Form form={form} name="parent">
-                        <Form.Item name="firstname" label="First Name">
+                        <Form.Item name="parentFirstName" label="First Name" required='true' value = {parentFirstName} onChange={e => setParentFirstName(e.target.value)}>
                 <Input placeholder="First Name" />
               </Form.Item>
 
-              <Form.Item name="middlename" label="Middle Name">
+              <Form.Item name="parentMiddleName" label="Middle Name" value = {parentMiddleName} onChange={e => setParentMiddleName(e.target.value)}>
                 <Input placeholder="Middle Name" />
               </Form.Item>
 
-              <Form.Item name="lastname" label="Last Name">
+              <Form.Item name="parentLastName" label="Last Name" value = {parentLastName} onChange={e => setParentLastName(e.target.value)}>
                 <Input placeholder="Last Name" />
               </Form.Item>
-              <Form.Item name="relation" initialValue="active" label="Relation">
+              <Form.Item name="relation" initialValue="active" label="Relation" required='true' value = {relation} onChange={e => setRelation(e.target.value)}>
                 <Radio.Group>
-                  <Radio value="active">Father</Radio>
-                  <Radio value="deactivated">Mother</Radio>
-                  <Radio value="blocked">Guardian</Radio>
+                  <Radio value="Father">Father</Radio>
+                  <Radio value="Mother">Mother</Radio>
+                  <Radio value="Guardian">Guardian</Radio>
                 </Radio.Group>
               </Form.Item>
-              <Form.Item name="phone" label="Phone No.">
+              <Form.Item name="parentMobile" label="Phone No." required='true' value = {parentMobile} onChange={e => setParentMobile(e.target.value)}>
                           <Input placeholder="Phone" />
                         </Form.Item>
-                        <Form.Item name="email" rules={[{ type: 'email' }]} label="Email Address">
+                        <Form.Item name="parentEmail" rules={[{ type: 'email' }]} label="Email Address" value = {parentEmail} onChange={e => setParentEmail(e.target.value)}>
                           <Input placeholder="name@gmail.com" />
                         </Form.Item>
         
@@ -202,8 +238,8 @@ function Info() {
                         <span className="icon-success">
                           <UilCheck />
                         </span>
-                        <Heading as="h3">Registration Successful</Heading>
-                        <p>Thank you!</p>
+                        <Heading as="h3">{responseMsg}</Heading>
+                        <p>{additionalMsg}</p>
                       </Cards>
                     </Cards>
                   </div>
