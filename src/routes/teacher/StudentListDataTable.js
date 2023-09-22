@@ -97,6 +97,9 @@ function UserList() {
             <Button className="btn-add_new" size="default" type="primary" key="1">
               <Link to="/teacher/add-user/StudentDetail">+ Add New Student</Link>
             </Button>,
+            <Button className="btn-add_new" size="default" type="primary" key="2">
+            <Link to="/teacher/add-batch/StudentBatch">+ Add New Batch</Link>
+          </Button>,
           ]}
         />
       </CardToolbox>
