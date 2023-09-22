@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect} from 'react';
 import { useSelector } from 'react-redux';
 import { Table } from 'antd';
 import UilEye from '@iconscout/react-unicons/icons/uil-eye';
@@ -10,35 +10,41 @@ import Heading from '../../components/heading/heading';
 import { Button } from '../../components/buttons/buttons';
 import { Cards } from '../../components/cards/frame/cards-frame';
 
-function UserListTable() {
-  const { users } = useSelector((state) => {
-    return {
-      users: state.users,
-    };
-  });
+function UserListTable() {  
+
+  const [students, setStudents] = useState([]);
+
+  useEffect(() => {
+    fetch('/user/all')
+      .then((res) => {
+        return res.json();
+      })
+      .then((result) => {
+        console.log(result);
+        setStudents(result);
+      });
+  },[]); 
 
   const usersTableData = [];
 
-  users.map((user) => {
-    const { id, name, designation, status } = user;
+  students.map((user) => {
+    const { userId, firstName, lastName, mobile, mailId} = user;
 
     return usersTableData.push({
-      key: id,
+      key: userId,
       user: (
         <div className="user-info">
           <figcaption>
             <Heading className="user-name" as="h6">
-              {name}
+              {firstName + ' ' + lastName}
             </Heading>
-            <span className="user-designation">San Francisco, CA</span>
+            <span className="user-designation">San Francisco, Test</span>
           </figcaption>
         </div>
-      ),
-      email: 'john@gmail.com',
-      company: 'Business Development',
-      position: designation,
-      joinDate: 'January 20, 2020',
-      status: <span className={`status-text ${status}`}>{status}</span>,
+      ), 
+      batchName: "2023-AI-Batch-1",   
+      mobile: mobile, 
+      mailId: mailId,
       action: (
         <div className="table-actions">
           <Button className="btn-icon" type="primary" to="#" shape="circle">
@@ -57,35 +63,25 @@ function UserListTable() {
 
   const usersTableColumns = [
     {
-      title: 'User',
+      title: 'Student',
       dataIndex: 'user',
       key: 'user',
     },
     {
+      title: 'Batch',
+      dataIndex: 'batchName',
+      key: 'batchName',
+    },
+    {
+      title: 'Mobile',
+      dataIndex: 'mobile',
+      key: 'mobile',
+    },
+    {
       title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-    },
-    {
-      title: 'Company',
-      dataIndex: 'company',
-      key: 'company',
-    },
-    {
-      title: 'Position',
-      dataIndex: 'position',
-      key: 'position',
-    },
-    {
-      title: 'Join Date',
-      dataIndex: 'joinDate',
-      key: 'joinDate',
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-    },
+      dataIndex: 'mailId',
+      key: 'mailId',
+    },    
     {
       title: 'Actions',
       dataIndex: 'action',

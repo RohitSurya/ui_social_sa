@@ -6,6 +6,7 @@ import withTeacherLayout from '../../layout/withTeacherLayout';
 
 const NotFound = lazy(() => import('../../container/pages/404'));
 const AddUser = lazy(() => import('./StudentDetail'));
+const AddBatch = lazy(() => import('./StudentBatch'));
 const Student = lazy(() => import('./StudentListDataTable'));
 
 const AddCourse = lazy(() => import('./CourseDetail'));
@@ -30,6 +31,7 @@ const Teacher = React.memo(() => {
         <Route path="student" element={<Student />} />
         <Route path="course" element={<Course />} />
         <Route path="add-user/*" element={<AddUser />} />
+        <Route path="add-batch/*" element={<AddBatch />} />
         <Route path="add-course/*" element={<AddCourse />} />
         <Route path="studentclassdetails" element={<StudentClass />} />
         <Route path="*" element={<NotFound />} />
